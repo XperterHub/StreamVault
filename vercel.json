@@ -1,0 +1,14 @@
+{
+  "builds": [
+    {
+      "src": "disney-plus-main/package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/disney-plus-main/$1"
+    }
+  ]
+}
