@@ -12,6 +12,9 @@ out/
 dist/
 */dist/
 
+# Firebase build cache
+.firebase/
+
 # Local Environment Variables
 .env
 */.env
@@ -32,4 +35,3 @@ yarn-error.log*
 Thumbs.db
 .vscode/
 */.vscode/
-

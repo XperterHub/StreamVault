@@ -1,10 +1,16 @@
 {
   "hosting": {
-    "source": "disney-plus-main",
+    "public": "disney-plus-main/out",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
     ]
   }
 }

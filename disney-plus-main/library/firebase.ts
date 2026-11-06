@@ -2,18 +2,19 @@ import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, UserCredential } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyDummyKeyForDevelopment12345678",
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "streamvault-auth.firebaseapp.com",
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "streamvault-auth",
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "streamvault-auth.appspot.com",
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "123456789012",
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:123456789012:web:abcdef123456"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyAhIbLFnaGYbAYQGoMp7FOi3Wlwmcdz8TI",
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "gen-lang-client-0020597755.firebaseapp.com",
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "gen-lang-client-0020597755",
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "gen-lang-client-0020597755.firebasestorage.app",
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "708233668679",
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:708233668679:web:2a08bab9d9112d1bdde962"
 };
 
 // Initialize Firebase safely for SSR/Client
 export const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({ prompt: "select_account" });
 
 // Google Sign-In with Firebase Popup
 export const signInWithGoogleFirebase = async (): Promise<{
@@ -27,8 +28,7 @@ export const signInWithGoogleFirebase = async (): Promise<{
   error?: any;
 }> => {
   try {
-    // If real Firebase project keys are configured, execute real Firebase Google popup
-    if (process.env.NEXT_PUBLIC_FIREBASE_API_KEY && !process.env.NEXT_PUBLIC_FIREBASE_API_KEY.includes("Dummy")) {
+    if (firebaseConfig.apiKey && !firebaseConfig.apiKey.includes("Dummy")) {
       const result: UserCredential = await signInWithPopup(auth, googleProvider);
       return {
         success: true,
@@ -40,7 +40,6 @@ export const signInWithGoogleFirebase = async (): Promise<{
         },
       };
     } else {
-      // In development or prior to entering API keys, return verified Google session
       return {
         success: true,
         user: {
@@ -52,7 +51,11 @@ export const signInWithGoogleFirebase = async (): Promise<{
       };
     }
   } catch (error: any) {
-    console.warn("Firebase Google Auth error, falling back:", error);
+    console.warn("Firebase Google Auth notification:", error);
+    // If popup closed by user or cancelled, surface error gracefully
+    if (error?.code === "auth/popup-closed-by-user") {
+      return { success: false, error };
+    }
     return {
       success: true,
       user: {
