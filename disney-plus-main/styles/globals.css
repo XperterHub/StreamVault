@@ -1,0 +1,145 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .transition-smooth {
+    @apply transition-all duration-150 ease-in;
+  }
+}
+
+:root {
+  color-scheme: dark;
+}
+
+/* ── Video player range input (progress & volume sliders) ── */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+  border: 2px solid rgba(0,0,0,0.3);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.5);
+  margin-top: -5px;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+  border: 2px solid rgba(0,0,0,0.3);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  border-radius: 2px;
+  cursor: pointer;
+}
+input[type="range"]::-moz-range-track {
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+
+/* ── Premium Video Skip HUD Animations (YouTube / Netflix style) ── */
+@keyframes skipPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  20% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  80% {
+    opacity: 0.95;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.12);
+  }
+}
+
+@keyframes skipRippleRing {
+  0% {
+    transform: scale(0.65);
+    opacity: 0.6;
+  }
+  60% {
+    opacity: 0.25;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+@keyframes chevronPulseLeft {
+  0%, 100% { opacity: 0.25; transform: translateX(0); }
+  50% { opacity: 1; transform: translateX(-4px); }
+}
+
+@keyframes chevronPulseRight {
+  0%, 100% { opacity: 0.25; transform: translateX(0); }
+  50% { opacity: 1; transform: translateX(4px); }
+}
+
+.animate-skip-pop {
+  animation: skipPop 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-skip-ring {
+  animation: skipRippleRing 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-chevron-left-1 {
+  animation: chevronPulseLeft 0.5s infinite ease-in-out;
+}
+.animate-chevron-left-2 {
+  animation: chevronPulseLeft 0.5s infinite ease-in-out 0.12s;
+}
+.animate-chevron-left-3 {
+  animation: chevronPulseLeft 0.5s infinite ease-in-out 0.24s;
+}
+
+.animate-chevron-right-1 {
+  animation: chevronPulseRight 0.5s infinite ease-in-out;
+}
+.animate-chevron-right-2 {
+  animation: chevronPulseRight 0.5s infinite ease-in-out 0.12s;
+}
+.animate-chevron-right-3 {
+  animation: chevronPulseRight 0.5s infinite ease-in-out 0.24s;
+}
+
+
+/* ── Refined Video Scrubber ── */
+.video-scrubber {
+  height: 4px;
+  transition: height 0.15s ease;
+}
+.video-scrubber:hover {
+  height: 6px;
+}
+.video-scrubber::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.6);
+  transition: transform 0.15s ease;
+}
+.video-scrubber:hover::-webkit-slider-thumb {
+  transform: scale(1.25);
+}

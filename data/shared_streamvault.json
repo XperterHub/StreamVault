@@ -1,0 +1,32 @@
+{
+  "videos": [],
+  "coupons": [],
+  "users": [],
+  "settings": {
+    "googleDriveServiceAccountEmail": "",
+    "isGoogleDriveConnected": false,
+    "driveStorageQuotaGB": 0,
+    "driveStorageUsedGB": 0,
+    "adSensePublisherId": "pub-2509450853164699",
+    "enablePreRollAds": true,
+    "enableMidRollAds": true,
+    "enablePostRollAds": true,
+    "skipAdDelaySeconds": 5,
+    "antiScreenRecordEnabled": true,
+    "dynamicWatermarkEnabled": true,
+    "watermarkOpacity": 0.25,
+    "antiDevToolsTrap": true,
+    "disableRightClickAndShortcuts": true,
+    "allowOfflineDownloads": true
+  },
+  "metrics": {
+    "totalRegisteredUsers": 0,
+    "activePaidSubscriptions": 0,
+    "monthlyRecurringRevenueUSD": 0,
+    "dailyActiveViewers": 0,
+    "totalVideoHoursStreamed": 0,
+    "estimatedAdRevenueUSD": 0,
+    "adImpressionsDelivered": 0,
+    "inAppOfflineDownloadsActive": 0
+  }
+}
