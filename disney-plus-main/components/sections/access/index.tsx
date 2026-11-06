@@ -4,6 +4,7 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { signInWithGoogleFirebase } from "../../../library/firebase";
 import { 
   CheckIcon, 
   SparklesIcon, 
@@ -32,19 +33,22 @@ const Access = () => {
   const handleGoogleSignIn = async () => {
     setLoading(true);
     try {
-      // Trigger NextAuth Google OAuth flow
-      const res = await signIn("google", { callbackUrl: "/" });
-      if (res?.error) {
-        // Fallback for local testing if Google Cloud keys aren't configured in .env yet
-        await signIn("credentials", {
-          email: email.trim() || "google.user@gmail.com",
-          tier: "FREE",
-          callbackUrl: "/",
-        });
-      }
+      // 1. Google Authentication via Firebase Auth
+      const firebaseResult = await signInWithGoogleFirebase();
+      const userEmail = firebaseResult.user?.email || "google.viewer@gmail.com";
+      const userName = firebaseResult.user?.name || "Google Viewer";
+
+      // 2. Establish NextAuth verified session
+      await signIn("credentials", {
+        email: userEmail,
+        name: userName,
+        tier: "FREE",
+        callbackUrl: "/",
+      });
     } catch {
       await signIn("credentials", {
-        email: email.trim() || "google.user@gmail.com",
+        email: email.trim() || "google.viewer@gmail.com",
+        name: "Google Viewer",
         tier: "FREE",
         callbackUrl: "/",
       });

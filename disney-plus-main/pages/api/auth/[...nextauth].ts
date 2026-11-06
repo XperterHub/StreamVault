@@ -11,15 +11,17 @@ export const authOptions: NextAuthOptions = {
       name: "StreamVault Viewer Account",
       credentials: {
         email: { label: "Email", type: "email" },
+        name: { label: "Name", type: "text" },
         tier: { label: "Tier", type: "text" },
         couponCode: { label: "Coupon Code", type: "text" }
       },
       async authorize(credentials) {
         const email = credentials?.email || "viewer@streamvault.internal";
+        const name = credentials?.name || email.split("@")[0];
         const tier = credentials?.tier || (credentials?.couponCode ? "PREMIUM" : "FREE");
         return {
           id: "usr-" + Math.floor(1000 + Math.random() * 9000),
-          name: email.split("@")[0],
+          name: name,
           email: email,
           tier: tier
         };

@@ -1,0 +1,10 @@
+{
+  "hosting": {
+    "source": "disney-plus-main",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}
