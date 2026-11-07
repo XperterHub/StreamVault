@@ -29,16 +29,9 @@ const Access = () => {
     };
     if (typeof window !== "undefined") {
       localStorage.setItem("streamvault_user", JSON.stringify(guestUser));
+      window.dispatchEvent(new CustomEvent("streamvault-auth", { detail: guestUser }));
       window.dispatchEvent(new Event("storage"));
-    }
-    try {
-      await signIn("credentials", {
-        ...guestUser,
-        couponCode: couponCode.trim(),
-        redirect: false,
-      });
-    } catch {
-      // In static hosting environments next-auth api might not run; localStorage handles state
+      window.location.href = "/";
     }
     setLoading(false);
   };
@@ -58,18 +51,10 @@ const Access = () => {
       };
       if (typeof window !== "undefined") {
         localStorage.setItem("streamvault_user", JSON.stringify(googleUser));
+        window.dispatchEvent(new CustomEvent("streamvault-auth", { detail: googleUser }));
         window.dispatchEvent(new Event("storage"));
+        window.location.href = "/";
       }
-
-      // 2. Try NextAuth if server available
-      try {
-        await signIn("credentials", {
-          email: userEmail,
-          name: userName,
-          tier: "FREE",
-          redirect: false,
-        });
-      } catch { }
     } catch (err) {
       console.warn("Fallback to client Google session", err);
       const fallbackUser = {
@@ -79,7 +64,9 @@ const Access = () => {
       };
       if (typeof window !== "undefined") {
         localStorage.setItem("streamvault_user", JSON.stringify(fallbackUser));
+        window.dispatchEvent(new CustomEvent("streamvault-auth", { detail: fallbackUser }));
         window.dispatchEvent(new Event("storage"));
+        window.location.href = "/";
       }
     } finally {
       setLoading(false);

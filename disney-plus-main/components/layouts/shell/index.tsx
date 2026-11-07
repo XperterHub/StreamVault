@@ -42,6 +42,7 @@ export default function ClientShell({ children, initialSession }: Props) {
     };
 
     window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("streamvault-auth", handleStorageChange);
 
     // Also listen to Firebase Auth changes
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
@@ -59,6 +60,7 @@ export default function ClientShell({ children, initialSession }: Props) {
 
     return () => {
       window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("streamvault-auth", handleStorageChange);
       unsubscribe();
     };
   }, []);
