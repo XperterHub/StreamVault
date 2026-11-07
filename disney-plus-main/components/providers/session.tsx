@@ -8,7 +8,11 @@ type Props = {
 };
 
 const Session = ({ children }: Props) => {
-  return <SessionProvider>{children}</SessionProvider>;
+  return (
+    <SessionProvider session={null} refetchInterval={0} refetchOnWindowFocus={false}>
+      {children}
+    </SessionProvider>
+  );
 };
 
 export default Session;
