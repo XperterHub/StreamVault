@@ -133,3 +133,4 @@ export default function ClientShell({ children, initialSession }: Props) {
     </main>
   );
 }
+

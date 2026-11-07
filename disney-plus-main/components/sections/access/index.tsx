@@ -4,9 +4,9 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import { signInWithGoogleFirebase } from "../../../library/firebase";
-import { 
-  SparklesIcon, 
-  TagIcon, 
+import {
+  SparklesIcon,
+  TagIcon,
   ShieldCheckIcon,
   PlayCircleIcon,
   LanguageIcon,
@@ -69,7 +69,7 @@ const Access = () => {
           tier: "FREE",
           redirect: false,
         });
-      } catch {}
+      } catch { }
     } catch (err) {
       console.warn("Fallback to client Google session", err);
       const fallbackUser = {
@@ -113,7 +113,7 @@ const Access = () => {
 
       {/* Main Glass Card */}
       <div className="bg-slate-900/95 border border-slate-800/90 rounded-2xl p-6 sm:p-8 backdrop-blur-2xl shadow-2xl space-y-6 ring-1 ring-white/5">
-        
+
         {/* Google Authentication Button */}
         <div>
           <button
