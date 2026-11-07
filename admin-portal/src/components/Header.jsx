@@ -1,95 +1,82 @@
 import React from 'react';
 import { 
-  Shield, 
   ChevronRight, 
-  RotateCcw,
   Menu,
   ExternalLink,
-  CheckCircle2
+  Radio
 } from 'lucide-react';
-import { getDatabase } from '../data/mockDatabase';
 
-export default function Header({ currentTab, onRefresh, onOpenMobileMenu }) {
-  const db = getDatabase();
-
+export default function Header({ currentTab, onOpenMobileMenu }) {
   const getTabTitle = () => {
     switch(currentTab) {
       case 'dashboard': 
-        return { section: 'Admin', title: 'Dashboard Overview', desc: 'Real-time viewer metrics and platform status' };
+        return { section: 'Admin', title: 'Dashboard', desc: 'Overview & Analytics' };
       case 'videos': 
-        return { section: 'Media', title: 'Videos & Streams', desc: 'Google Drive master videos, audio tracks & subtitles' };
+        return { section: 'Media', title: 'Videos & Streams', desc: 'Google Drive Catalog' };
       case 'coupons': 
-        return { section: 'Audience', title: 'Coupons & Deals', desc: 'Create and manage promotional discount codes' };
+        return { section: 'Audience', title: 'Coupons & Deals', desc: 'Promotions & Passes' };
       case 'viewers': 
-        return { section: 'Audience', title: 'Viewer Accounts', desc: 'Manage registered users and subscription tiers' };
+        return { section: 'Audience', title: 'Viewer Accounts', desc: 'Tiers & Access Control' };
       default: 
-        return { section: 'Admin', title: 'Command Center', desc: 'Platform Management Console' };
+        return { section: 'Admin', title: 'Command Center', desc: 'Platform Management' };
     }
   };
 
   const { section, title } = getTabTitle();
 
-  const handleResetClean = () => {
-    if (window.confirm("Purge any cached demo data and reset database to completely clean state?")) {
-      db.resetAllToClean();
-      if (onRefresh) onRefresh();
-      window.location.reload();
-    }
-  };
-
   return (
-    <header className="h-16 bg-slate-900/90 backdrop-blur border-b border-slate-800 px-3 sm:px-6 flex items-center justify-between sticky top-0 z-30 shrink-0">
+    <header className="h-16 bg-slate-900/80 backdrop-blur-md border-b border-slate-800/80 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 shrink-0">
       {/* Left: Mobile Menu Toggle + Breadcrumbs */}
       <div className="flex items-center space-x-3">
         {/* Hamburger Menu on Mobile/Tablet */}
         <button
           onClick={onOpenMobileMenu}
-          className="p-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800 lg:hidden transition-colors"
-          title="Open Menu"
+          className="p-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/80 lg:hidden transition-colors btn-press"
+          title="Open Navigation Menu"
         >
           <Menu className="w-5 h-5" />
         </button>
 
-        <div>
-          <div className="flex items-center space-x-1.5 text-xs text-slate-400">
-            <span className="hidden sm:inline">{section}</span>
-            <ChevronRight className="w-3 h-3 text-slate-600 hidden sm:inline" />
-            <span className="text-slate-100 font-semibold truncate max-w-[140px] sm:max-w-none">{title}</span>
+        <nav aria-label="Breadcrumb">
+          <div className="flex items-center space-x-2 text-xs">
+            <span className="text-slate-500 font-medium hidden sm:inline">{section}</span>
+            <ChevronRight className="w-3.5 h-3.5 text-slate-600 hidden sm:inline" />
+            <span className="px-2.5 py-1 rounded-md bg-slate-800/60 border border-slate-700/60 font-semibold text-slate-200">
+              {title}
+            </span>
           </div>
-        </div>
+        </nav>
       </div>
 
-      {/* Right: Controls */}
-      <div className="flex items-center space-x-2 sm:space-x-3">
-        {/* Live Status Indicator */}
-        <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded-md bg-emerald-950/40 border border-emerald-800/50 text-xs text-emerald-300">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span className="font-medium hidden sm:inline">Live Sync Active</span>
-          <span className="font-medium sm:hidden">Live</span>
+      {/* Right: Sleek, Minimal Utility Group */}
+      <div className="flex items-center space-x-2.5 sm:space-x-3">
+        {/* Subtle Online Indicator */}
+        <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-slate-950/60 border border-slate-800 text-[11px] text-slate-400">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span className="font-medium hidden sm:inline">Online</span>
         </div>
 
-        {/* Open Viewer Website */}
+        {/* View Live Portal Icon Link */}
         <a
           href="/"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg border border-blue-500/30 bg-blue-600/10 hover:bg-blue-600/20 text-blue-300 text-xs font-medium transition-colors"
-          title="Open Viewer Streaming Portal"
+          className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/70 border border-transparent hover:border-slate-700/60 transition-all btn-press"
+          title="Open Viewer Website"
         >
-          <ExternalLink className="w-3.5 h-3.5 text-blue-400" />
-          <span className="hidden sm:inline">Open Viewer Website</span>
-          <span className="sm:hidden">Viewer</span>
+          <ExternalLink className="w-4 h-4" />
         </a>
 
-        {/* Purge Cache Button */}
-        <button
-          onClick={handleResetClean}
-          title="Clear all demo/cached records and reset to clean state"
-          className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg border border-slate-700/80 bg-slate-800/60 hover:bg-slate-700/80 text-slate-400 hover:text-slate-200 text-xs transition-colors"
-        >
-          <RotateCcw className="w-3.5 h-3.5" />
-          <span className="hidden xl:inline">Reset</span>
-        </button>
+        {/* Admin Profile Chip */}
+        <div className="flex items-center space-x-2 pl-2 sm:pl-3 border-l border-slate-800">
+          <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center font-bold text-[11px] text-white shadow-sm ring-1 ring-white/10">
+            A
+          </div>
+          <div className="hidden md:block text-left">
+            <p className="text-xs font-semibold text-slate-200 leading-none">Admin</p>
+            <p className="text-[10px] text-slate-500 leading-none mt-0.5">Superuser</p>
+          </div>
+        </div>
       </div>
     </header>
   );

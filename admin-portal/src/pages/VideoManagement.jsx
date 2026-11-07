@@ -254,18 +254,18 @@ export default function VideoManagement() {
   });
 
   return (
-    <div className="space-y-5 sm:space-y-6">
+    <div className="space-y-5 sm:space-y-6 animate-fade-in">
       {/* Top Header Card */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-gradient-to-r from-slate-900 via-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <h2 className="text-lg sm:text-xl font-bold text-slate-100">Video Catalog & Streams</h2>
-            <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
+            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20 shadow-sm">
               {videos.length} Active {videos.length === 1 ? 'Title' : 'Titles'}
             </span>
           </div>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Publish your Google Drive videos with multi-language audio tracks. Streams play inside our custom HTML5 video player with DRM anti-piracy protection.
+            Publish your Google Drive videos with multi-language audio tracks and subtitles directly to the streaming portal.
           </p>
         </div>
 
@@ -310,8 +310,8 @@ export default function VideoManagement() {
 
       {/* Main Video Ingestion Form Modal */}
       {isFormOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-          <div className="bg-slate-900 border border-slate-700/80 rounded-2xl w-full max-w-3xl my-auto shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
+        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+          <div className="bg-slate-900 border border-slate-700/80 rounded-2xl w-full max-w-3xl my-auto shadow-2xl overflow-hidden flex flex-col max-h-[92vh] animate-scale-in">
             {/* Modal Header */}
             <div className="p-4 sm:p-5 border-b border-slate-800 flex items-center justify-between bg-slate-900/90 sticky top-0 z-10 shrink-0">
               <div className="flex items-center space-x-2.5">

@@ -116,21 +116,21 @@ export default function CouponGenerator() {
   });
 
   return (
-    <div className="space-y-5 sm:space-y-6">
+    <div className="space-y-5 sm:space-y-6 animate-fade-in">
       {/* Top Header Card */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-gradient-to-r from-slate-900 via-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <h2 className="text-lg sm:text-xl font-bold text-slate-100 flex items-center gap-2">
               <Ticket className="w-5 h-5 text-indigo-400" />
               <span>Promotion & Coupon Generator</span>
             </h2>
-            <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 shadow-sm">
               {coupons.filter(c => c.isActive).length} Active
             </span>
           </div>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Create discount passes for ad-free VIP upgrades. Viewers can redeem codes directly during checkout.
+            Create discount passes for VIP upgrades. Viewers can redeem codes directly in the streaming portal.
           </p>
         </div>
 
