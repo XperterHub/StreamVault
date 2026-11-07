@@ -93,12 +93,12 @@ export default function SecureVideoPlayer({ media, onClose }: Props) {
   const adDisplayContainerRef = useRef<any>(null);
   const fallbackTimerRef = useRef<any>(null);
 
-  const [adSensePublisherId, setAdSensePublisherId] = useState("pub-2509450853164699");
-  const [isAdPlaying, setIsAdPlaying] = useState(!isPremium);
+  const [adSensePublisherId, setAdSensePublisherId] = useState("");
+  const [isAdPlaying, setIsAdPlaying] = useState(false);
   const [isIMAPlaying, setIsIMAPlaying] = useState(false);
   const [useFallbackAd, setUseFallbackAd] = useState(false);
-  const [adTimeRemaining, setAdTimeRemaining] = useState(5);
-  const [canSkipAd, setCanSkipAd] = useState(false);
+  const [adTimeRemaining, setAdTimeRemaining] = useState(0);
+  const [canSkipAd, setCanSkipAd] = useState(true);
   const [adProgress, setAdProgress] = useState(0);
   const [isAdMuted, setIsAdMuted] = useState(false);
   const [midRollTriggered, setMidRollTriggered] = useState<Record<number, boolean>>({});
@@ -110,18 +110,6 @@ export default function SecureVideoPlayer({ media, onClose }: Props) {
   // In-App Offline Download State
   const [downloadProgress, setDownloadProgress] = useState<number | null>(null);
   const [isDownloadedOffline, setIsDownloadedOffline] = useState(false);
-
-  // Fetch live settings (including publisher ID from admin portal)
-  useEffect(() => {
-    fetch("/api/sync")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data?.settings?.adSensePublisherId) {
-          setAdSensePublisherId(data.settings.adSensePublisherId);
-        }
-      })
-      .catch(() => {});
-  }, []);
 
   // Compute stream URL from Google Drive file ID
   const computeStreamUrl = (quality: "720p" | "1080p" | "4K") => {
@@ -476,62 +464,23 @@ export default function SecureVideoPlayer({ media, onClose }: Props) {
     }, 320);
   };
 
-  // Anti-Piracy keyboard/context controls
+  // Player keyboard shortcuts
   useEffect(() => {
-    const handleContextMenu = (e: MouseEvent) => {
-      e.preventDefault();
-      setSecurityToast("Right-click is restricted on this video.");
-      setTimeout(() => setSecurityToast(""), 3000);
-    };
-
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (isAdPlaying) {
-        if (e.key === "Escape" || e.code === "Space" || e.key === "Enter") {
-          e.preventDefault();
-          handleFinishAd();
-          return;
-        }
-      }
-      if (e.code === "Space" && !isAdPlaying) { e.preventDefault(); handlePlayPause(); return; }
-      if ((e.key === "ArrowLeft" || e.key === "j" || e.key === "J") && !isAdPlaying) { e.preventDefault(); handleSkipBackward(); return; }
-      if ((e.key === "ArrowRight" || e.key === "l" || e.key === "L") && !isAdPlaying) { e.preventDefault(); handleSkipForward(); return; }
+      if (e.code === "Space") { e.preventDefault(); handlePlayPause(); return; }
+      if (e.key === "ArrowLeft" || e.key === "j" || e.key === "J") { e.preventDefault(); handleSkipBackward(); return; }
+      if (e.key === "ArrowRight" || e.key === "l" || e.key === "L") { e.preventDefault(); handleSkipForward(); return; }
       if (e.key === "f" || e.key === "F") { e.preventDefault(); toggleFullscreen(); return; }
       if (e.key === "m" || e.key === "M") { e.preventDefault(); toggleMute(); return; }
-
-      if (
-        (e.ctrlKey && (e.key === "s" || e.key === "u" || e.key === "p")) ||
-        e.key === "F12" ||
-        (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "i" || e.key === "C" || e.key === "c"))
-      ) {
-        e.preventDefault();
-        setSecurityToast("Developer tools are disabled on this video.");
-        setTimeout(() => setSecurityToast(""), 3000);
-      }
     };
 
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        setIsScreenHidden(true);
-        if (videoRef.current) videoRef.current.pause();
-        if (adVideoRef.current && isAdPlaying) adVideoRef.current.pause();
-        setIsPlaying(false);
-      } else {
-        setIsScreenHidden(false);
-      }
-    };
-
-    const container = containerRef.current;
-    if (container) container.addEventListener("contextmenu", handleContextMenu);
     window.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
-      if (container) container.removeEventListener("contextmenu", handleContextMenu);
       window.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
       if (skipTimerRef.current) clearTimeout(skipTimerRef.current);
     };
-  }, [isAdPlaying, isPlaying]);
+  }, [isPlaying]);
 
   const handlePlayPause = () => {
     if (isAdPlaying) return;
@@ -1258,13 +1207,6 @@ export default function SecureVideoPlayer({ media, onClose }: Props) {
           </div>
         </div>
       )}
-
-      {/* Google IMA / AdSense SDK Script */}
-      <script
-        async
-        src="https://imasdk.googleapis.com/js/sdkloader/ima3.js"
-        data-ad-client={`ca-${adSensePublisherId}`}
-      />
     </div>
   );
 }

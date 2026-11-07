@@ -93,7 +93,7 @@ const Access = () => {
             Stream in Any Language
           </h1>
           <p className="text-xs sm:text-sm text-slate-400 max-w-sm mx-auto leading-relaxed">
-            Multi-audio master streaming with Google Drive, real-time forensic protection, and in-app offline vaults.
+            Multi-audio master streaming with Google Drive and instant cinematic playback.
           </p>
         </div>
       </div>

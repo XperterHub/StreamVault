@@ -22,8 +22,6 @@ export default function Header({ currentTab, onRefresh, onOpenMobileMenu }) {
         return { section: 'Audience', title: 'Coupons & Deals', desc: 'Create and manage promotional discount codes' };
       case 'viewers': 
         return { section: 'Audience', title: 'Viewer Accounts', desc: 'Manage registered users and subscription tiers' };
-      case 'settings': 
-        return { section: 'System', title: 'Settings & Security', desc: 'Google Drive streaming, AdSense and DRM controls' };
       default: 
         return { section: 'Admin', title: 'Command Center', desc: 'Platform Management Console' };
     }
@@ -61,29 +59,22 @@ export default function Header({ currentTab, onRefresh, onOpenMobileMenu }) {
         </div>
       </div>
 
-      {/* Right: Badges & Controls */}
+      {/* Right: Controls */}
       <div className="flex items-center space-x-2 sm:space-x-3">
-        {/* Live Auto-Save Indicator */}
+        {/* Live Status Indicator */}
         <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded-md bg-emerald-950/40 border border-emerald-800/50 text-xs text-emerald-300">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
           <span className="font-medium hidden sm:inline">Live Sync Active</span>
           <span className="font-medium sm:hidden">Live</span>
         </div>
 
-        {/* DRM Status */}
-        <div className="hidden md:flex items-center space-x-1.5 px-2.5 py-1 rounded-md bg-slate-800/80 border border-slate-700/80 text-xs text-slate-300">
-          <Shield className="w-3.5 h-3.5 text-blue-400" />
-          <span className="text-slate-400">DRM:</span>
-          <span className="text-slate-200 font-medium">Active</span>
-        </div>
-
         {/* Open Viewer Website */}
         <a
-          href="http://localhost:3000"
+          href="/"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg border border-blue-500/30 bg-blue-600/10 hover:bg-blue-600/20 text-blue-300 text-xs font-medium transition-colors"
-          title="Open Viewer Streaming Portal on Port 3000"
+          title="Open Viewer Streaming Portal"
         >
           <ExternalLink className="w-3.5 h-3.5 text-blue-400" />
           <span className="hidden sm:inline">Open Viewer Website</span>

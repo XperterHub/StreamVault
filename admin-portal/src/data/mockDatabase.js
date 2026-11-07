@@ -18,21 +18,7 @@ export const INITIAL_COUPONS = [];
 export const INITIAL_USERS = [];
 
 export const INITIAL_SETTINGS = {
-  googleDriveServiceAccountEmail: "",
-  isGoogleDriveConnected: false,
-  driveStorageQuotaGB: 0,
-  driveStorageUsedGB: 0,
-  adSensePublisherId: "pub-2509450853164699",
-  enablePreRollAds: true,
-  enableMidRollAds: true,
-  enablePostRollAds: true,
-  skipAdDelaySeconds: 5,
-  antiScreenRecordEnabled: true,
-  dynamicWatermarkEnabled: true,
-  watermarkOpacity: 0.25,
-  antiDevToolsTrap: true,
-  disableRightClickAndShortcuts: true,
-  allowOfflineDownloads: true
+  isGoogleDriveConnected: true
 };
 
 export const INITIAL_METRICS = {
@@ -40,10 +26,7 @@ export const INITIAL_METRICS = {
   activePaidSubscriptions: 0,
   monthlyRecurringRevenueUSD: 0,
   dailyActiveViewers: 0,
-  totalVideoHoursStreamed: 0,
-  estimatedAdRevenueUSD: 0,
-  adImpressionsDelivered: 0,
-  inAppOfflineDownloadsActive: 0
+  totalVideoHoursStreamed: 0
 };
 
 // Automatic purge of any legacy demo data from localStorage on initialization

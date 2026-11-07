@@ -6,7 +6,6 @@ import DashboardOverview from './pages/DashboardOverview';
 import VideoManagement from './pages/VideoManagement';
 import CouponGenerator from './pages/CouponGenerator';
 import SubscriptionManager from './pages/SubscriptionManager';
-import SecuritySettings from './pages/SecuritySettings';
 import LoginModal from './pages/LoginModal';
 
 function AdminPortalContent() {
@@ -29,8 +28,6 @@ function AdminPortalContent() {
         return <CouponGenerator key={refreshKey} />;
       case 'viewers':
         return <SubscriptionManager key={refreshKey} />;
-      case 'settings':
-        return <SecuritySettings key={refreshKey} />;
       default:
         return <DashboardOverview onNavigate={setCurrentTab} />;
     }

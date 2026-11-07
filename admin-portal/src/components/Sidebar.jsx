@@ -4,9 +4,7 @@ import {
   Film, 
   Tag, 
   Users, 
-  ShieldCheck, 
   LogOut, 
-  CheckCircle2,
   X,
   Radio
 } from 'lucide-react';
@@ -19,8 +17,7 @@ export default function Sidebar({ currentTab, setCurrentTab, isMobileOpen, setIs
     { id: 'dashboard', name: 'Dashboard', icon: LayoutDashboard, desc: 'Overview & Analytics' },
     { id: 'videos', name: 'Videos & Streams', icon: Film, desc: 'Google Drive Catalog' },
     { id: 'coupons', name: 'Coupons & Deals', icon: Tag, desc: 'Promotions & Passes' },
-    { id: 'viewers', name: 'Viewer Accounts', icon: Users, desc: 'Tiers & Access Control' },
-    { id: 'settings', name: 'Settings & Security', icon: ShieldCheck, desc: 'Drive, Ads & DRM' }
+    { id: 'viewers', name: 'Viewer Accounts', icon: Users, desc: 'Tiers & Access Control' }
   ];
 
   const handleSelectTab = (id) => {
@@ -78,7 +75,7 @@ export default function Sidebar({ currentTab, setCurrentTab, isMobileOpen, setIs
               Live Portal
             </span>
             <span className="text-emerald-400 text-[11px] font-semibold flex items-center gap-1">
-              Port 3000
+              Active
             </span>
           </div>
         </div>
