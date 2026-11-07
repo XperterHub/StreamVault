@@ -24,10 +24,10 @@ export default function LoginModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4 animate-fade-in">
-      <div className="w-full max-w-sm bg-slate-900/95 border border-slate-800/90 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] p-6 relative animate-scale-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4 animate-fade-in">
+      <div className="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-xl shadow-2xl p-6 relative animate-scale-in">
         <div className="text-center mb-6">
-          <div className="w-11 h-11 mx-auto mb-3 rounded-xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shadow-sm">
+          <div className="w-10 h-10 mx-auto mb-3 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-200 shadow-sm">
             <Shield className="w-5 h-5 text-blue-400" />
           </div>
           <h2 className="text-lg font-bold text-white tracking-tight">Admin Sign In</h2>
