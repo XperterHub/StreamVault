@@ -4,6 +4,7 @@ const nextConfig = {
   swcMinify: true,
   experimental: { appDir: true },
   images: {
+    unoptimized: true,
     domains: [
       "image.tmdb.org",
       "img1.hotstarext.com",

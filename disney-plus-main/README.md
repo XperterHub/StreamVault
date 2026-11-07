@@ -1,8 +1,8 @@
-# [Disney Plus - Clone](https://disneyplus-ntabucejo.vercel.app/)
+# StreamVault - Next-Gen Cinema & Streaming Platform
 
 ### Project Description
 
-Software, structures and practices on this disney plus clone is 100% created and maintained by Nikko Abucejo. Any information/data is provided by TMDB API. Authentication is only stored on the client's browser and will never store any user information in the database. Everything on this project is for learning purposes only. Feel free to copy/clone/fork the repository. Any feedback is appreciated!
+StreamVault is a high-performance, private cinematic streaming experience engineered with Google Cloud Drive, forensic multi-audio playback, and real-time client-side authentication. Any information/data is provided by TMDB API. Authentication is safely managed client-side with Firebase and Google Identity. Designed for ultra-smooth playback and modern entertainment workflows.
 
 ### Technologies Used
 

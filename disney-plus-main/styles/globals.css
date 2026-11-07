@@ -2,14 +2,67 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-  .transition-smooth {
-    @apply transition-all duration-150 ease-in;
+@layer base {
+  html {
+    color-scheme: dark;
+    background-color: #0b0f19;
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    background-color: #0b0f19;
+    color: #f1f5f9;
+    overflow-x: hidden;
   }
 }
 
-:root {
-  color-scheme: dark;
+@layer components {
+  .transition-smooth {
+    @apply transition-all duration-200 ease-out;
+  }
+
+  .glass-panel {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .glass-card {
+    background: rgba(20, 27, 43, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .glass-card:hover {
+    border-color: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.7);
+  }
+
+  .cinematic-gradient-bottom {
+    background: linear-gradient(180deg, transparent 0%, rgba(11, 15, 25, 0.6) 50%, #0b0f19 100%);
+  }
+  .cinematic-gradient-left {
+    background: linear-gradient(90deg, #0b0f19 0%, rgba(11, 15, 25, 0.7) 40%, transparent 100%);
+  }
+}
+
+/* ── Custom Dark Scrollbar ── */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0b0f19;
+}
+::-webkit-scrollbar-thumb {
+  background: #27354f;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #384b6f;
 }
 
 /* ── Video player range input (progress & volume sliders) ── */
@@ -42,7 +95,6 @@ input[type="range"]::-moz-range-track {
   border-radius: 2px;
   cursor: pointer;
 }
-
 
 /* ── Premium Video Skip HUD Animations (YouTube / Netflix style) ── */
 @keyframes skipPop {
@@ -119,7 +171,6 @@ input[type="range"]::-moz-range-track {
 .animate-chevron-right-3 {
   animation: chevronPulseRight 0.5s infinite ease-in-out 0.24s;
 }
-
 
 /* ── Refined Video Scrubber ── */
 .video-scrubber {

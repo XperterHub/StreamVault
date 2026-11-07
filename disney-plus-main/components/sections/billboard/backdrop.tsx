@@ -30,20 +30,26 @@ const Backdrop = ({ src, isAlwaysDisplayed }: Props) => {
     };
   }, [isAlwaysDisplayed]);
 
+  const imageSrc = !src
+    ? "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1600&auto=format&fit=crop&q=80"
+    : src.startsWith("http")
+    ? src
+    : `https://image.tmdb.org/t/p/original${src}`;
+
   return (
     <>
       {isDisplayed ? (
         <div className="absolute inset-0 bg-background-dark" />
       ) : null}
       <Image
-        src={`https://image.tmdb.org/t/p/original${src}`}
-        alt="Showcase"
+        src={imageSrc}
+        alt="Showcase Backdrop"
         fill
         sizes="100vw"
         priority
         className={`${
           isDisplayed ? "opacity-100" : "desktop:opacity-0"
-        } object-cover brightness-110 transition-all duration-1000 ease-in`}
+        } object-cover brightness-[105%] transition-all duration-1000 ease-in`}
       />
     </>
   );

@@ -1,6 +1,8 @@
 {
   "hosting": {
     "public": "disney-plus-main/out",
+    "cleanUrls": true,
+    "trailingSlash": false,
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -8,8 +10,32 @@
     ],
     "rewrites": [
       {
+        "source": "/admin/**",
+        "destination": "/admin/index.html"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "**/*.@(css|js)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=31536000, immutable"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(jpg|jpeg|png|svg|webp|ico|mp4)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=86400"
+          }
+        ]
       }
     ]
   }
