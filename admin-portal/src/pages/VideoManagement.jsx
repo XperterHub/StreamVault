@@ -310,366 +310,393 @@ export default function VideoManagement() {
 
       {/* Main Video Ingestion Form Modal */}
       {isFormOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-          <div className="bg-slate-900 border border-slate-700/80 rounded-2xl w-full max-w-3xl my-auto shadow-2xl overflow-hidden flex flex-col max-h-[92vh] animate-scale-in">
+        <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-hidden">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-5xl h-[90vh] max-h-[880px] shadow-2xl flex flex-col overflow-hidden animate-scale-in">
             {/* Modal Header */}
-            <div className="p-4 sm:p-5 border-b border-slate-800 flex items-center justify-between bg-slate-900/90 sticky top-0 z-10 shrink-0">
-              <div className="flex items-center space-x-2.5">
-                <div className="w-8 h-8 rounded-lg bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400">
-                  <Film className="w-4 h-4" />
+            <div className="px-6 py-4 sm:py-5 border-b border-slate-800 flex items-center justify-between bg-slate-900 shrink-0">
+              <div className="flex items-center space-x-3">
+                <div className="w-9 h-9 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400">
+                  <Film className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-sm sm:text-base font-bold text-slate-100">Add New Video Stream</h3>
-                  <p className="text-[11px] text-slate-400">
-                    Paste your Google Drive link to publish immediately to the viewer portal
+                  <h3 className="text-base sm:text-lg font-bold text-slate-100">Add New Video Stream</h3>
+                  <p className="text-xs text-slate-400">
+                    Ingest Google Drive video streams with multi-language audio & subtitles to live viewer portal
                   </p>
                 </div>
               </div>
               <button
+                type="button"
                 onClick={() => setIsFormOpen(false)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800"
+                className="p-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Modal Body */}
-            <form onSubmit={handleSubmit} className="p-4 sm:p-6 overflow-y-auto space-y-6 flex-1">
-              {/* SECTION 1: Video Information */}
-              <div className="space-y-3.5">
-                <div className="flex items-center space-x-2 pb-1 border-b border-slate-800 text-xs font-semibold text-slate-300">
-                  <Film className="w-3.5 h-3.5 text-blue-400" />
-                  <span>1. Video Information</span>
-                </div>
+            {/* Modal Form */}
+            <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+              {/* Scrollable Form Body */}
+              <div className="p-6 overflow-y-auto flex-1 min-h-0 space-y-6 overscroll-contain">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                  
+                  {/* LEFT COLUMN: Metadata & Access Tier */}
+                  <div className="lg:col-span-6 space-y-5">
+                    {/* SECTION 1: Video Information */}
+                    <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-4 sm:p-5 space-y-4">
+                      <div className="flex items-center space-x-2 pb-2 border-b border-slate-800 text-xs font-semibold text-slate-200">
+                        <Film className="w-4 h-4 text-blue-400" />
+                        <span>1. Video Metadata</span>
+                      </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                  <div className="sm:col-span-2">
-                    <label className="block text-xs font-medium text-slate-300 mb-1">
-                      Video Title <span className="text-red-400">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.title}
-                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                      placeholder="e.g. Inception / Cosmic Odyssey / Kapan"
-                      className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500 placeholder-slate-600"
-                    />
+                      <div className="space-y-3.5">
+                        <div>
+                          <label className="block text-xs font-medium text-slate-300 mb-1">
+                            Video Title <span className="text-red-400">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            value={formData.title}
+                            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                            placeholder="e.g. Inception / Cosmic Odyssey / Kapan"
+                            className="w-full bg-slate-900 border border-slate-700/80 rounded-lg px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-blue-500 placeholder-slate-500"
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-xs font-medium text-slate-300 mb-1">Genre</label>
+                            <select
+                              value={formData.genre}
+                              onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
+                              className="w-full bg-slate-900 border border-slate-700/80 rounded-lg px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-blue-500"
+                            >
+                              <option value="Action">Action</option>
+                              <option value="Sci-Fi">Sci-Fi</option>
+                              <option value="Drama">Drama</option>
+                              <option value="Animation">Animation</option>
+                              <option value="Documentary">Documentary</option>
+                              <option value="Thriller">Thriller</option>
+                            </select>
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-medium text-slate-300 mb-1">Duration (Mins)</label>
+                            <input
+                              type="number"
+                              value={formData.durationMinutes}
+                              onChange={(e) => setFormData({ ...formData, durationMinutes: e.target.value })}
+                              placeholder="120"
+                              className="w-full bg-slate-900 border border-slate-700/80 rounded-lg px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-blue-500 placeholder-slate-500"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-medium text-slate-300 mb-1">Access Tier</label>
+                          <select
+                            value={formData.isPremiumOnly ? "PREMIUM" : "FREE"}
+                            onChange={(e) => setFormData({ ...formData, isPremiumOnly: e.target.value === "PREMIUM" })}
+                            className="w-full bg-slate-900 border border-slate-700/80 rounded-lg px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-blue-500"
+                          >
+                            <option value="FREE">Free Tier (Standard HD 720p)</option>
+                            <option value="PREMIUM">VIP Premium Exclusive (Ultra HD 1080p & 4K Unlocked)</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-medium text-slate-300 mb-1">
+                            Poster Image URL <span className="text-slate-500 font-normal">(Optional)</span>
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.thumbnailUrl}
+                            onChange={(e) => setFormData({ ...formData, thumbnailUrl: e.target.value })}
+                            placeholder="https://images.unsplash.com/... or leave blank for default"
+                            className="w-full bg-slate-900 border border-slate-700/80 rounded-lg px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-blue-500 placeholder-slate-500"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-medium text-slate-300 mb-1">Synopsis / Storyline</label>
+                          <textarea
+                            rows={3}
+                            value={formData.description}
+                            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                            placeholder="Brief overview of the video title and plot..."
+                            className="w-full bg-slate-900 border border-slate-700/80 rounded-lg px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-blue-500 placeholder-slate-500 resize-none"
+                          />
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
-                  <div>
-                    <label className="block text-xs font-medium text-slate-300 mb-1">Genre</label>
-                    <select
-                      value={formData.genre}
-                      onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500"
-                    >
-                      <option value="Action">Action</option>
-                      <option value="Sci-Fi">Sci-Fi</option>
-                      <option value="Drama">Drama</option>
-                      <option value="Animation">Animation</option>
-                      <option value="Documentary">Documentary</option>
-                      <option value="Thriller">Thriller</option>
-                    </select>
-                  </div>
+                  {/* RIGHT COLUMN: Stream Source & Audio/Subtitles */}
+                  <div className="lg:col-span-6 space-y-5">
+                    {/* SECTION 2: Google Drive Video Stream */}
+                    <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-4 sm:p-5 space-y-3.5">
+                      <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+                        <div className="flex items-center space-x-2 text-xs font-semibold text-slate-200">
+                          <HardDrive className="w-4 h-4 text-blue-400" />
+                          <span>2. Google Drive Video Stream</span>
+                        </div>
+                        {detectedFileId && (
+                          <span className="text-[11px] font-mono text-emerald-400 flex items-center gap-1 bg-emerald-950/50 border border-emerald-800/60 px-2 py-0.5 rounded-md">
+                            <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                            ID: {detectedFileId.slice(0, 10)}...
+                          </span>
+                        )}
+                      </div>
 
-                  <div>
-                    <label className="block text-xs font-medium text-slate-300 mb-1">Duration (Minutes)</label>
-                    <input
-                      type="number"
-                      value={formData.durationMinutes}
-                      onChange={(e) => setFormData({ ...formData, durationMinutes: e.target.value })}
-                      placeholder="e.g. 120"
-                      className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500 placeholder-slate-600"
-                    />
-                  </div>
+                      <div className="space-y-3">
+                        <div>
+                          <label className="block text-xs font-medium text-slate-300 mb-1">
+                            Google Drive Video Link or File ID <span className="text-red-400">*</span>
+                          </label>
+                          <div className="flex gap-2">
+                            <input
+                              type="text"
+                              required
+                              value={formData.googleDriveLink}
+                              onChange={(e) => {
+                                setFormData({ ...formData, googleDriveLink: e.target.value });
+                                setLinkTestStatus(null);
+                              }}
+                              placeholder="https://drive.google.com/file/d/1FMtjMg.../view"
+                              className="flex-1 bg-slate-900 border border-slate-700/80 rounded-lg px-3 py-2 text-xs text-slate-100 font-mono focus:outline-none focus:border-blue-500 placeholder-slate-600"
+                            />
+                            <button
+                              type="button"
+                              onClick={testDriveConnection}
+                              disabled={linkTestStatus?.checking || !formData.googleDriveLink}
+                              className="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-colors shrink-0 disabled:opacity-50"
+                            >
+                              {linkTestStatus?.checking ? 'Checking...' : 'Verify Stream'}
+                            </button>
+                          </div>
+                          <p className="text-[11px] text-slate-400 mt-1.5">
+                            Ensure link sharing is set to: <strong className="text-slate-300">"Anyone with the link can view"</strong>.
+                          </p>
+                        </div>
 
-                  <div className="sm:col-span-2">
-                    <label className="block text-xs font-medium text-slate-300 mb-1">Synopsis / Storyline</label>
-                    <textarea
-                      rows={2}
-                      value={formData.description}
-                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                      placeholder="Brief overview of the video title..."
-                      className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500 placeholder-slate-600 resize-none"
-                    />
-                  </div>
+                        {/* Connection Verification Box */}
+                        {linkTestStatus && (
+                          <div className={`p-2.5 rounded-lg border text-xs flex items-center space-x-2 ${
+                            linkTestStatus.success 
+                              ? 'bg-emerald-950/40 border-emerald-800/60 text-emerald-300' 
+                              : 'bg-amber-950/40 border-amber-800/60 text-amber-300'
+                          }`}>
+                            {linkTestStatus.success ? (
+                              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                            ) : (
+                              <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
+                            )}
+                            <span>{linkTestStatus.message}</span>
+                          </div>
+                        )}
 
-                  <div className="sm:col-span-2">
-                    <label className="block text-xs font-medium text-slate-300 mb-1">
-                      Poster Image URL (Optional)
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.thumbnailUrl}
-                      onChange={(e) => setFormData({ ...formData, thumbnailUrl: e.target.value })}
-                      placeholder="https://images.unsplash.com/... or leave blank for default poster"
-                      className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500 placeholder-slate-600"
-                    />
-                  </div>
+                        {/* Optional Multiple Resolutions Toggle */}
+                        <div className="pt-2 border-t border-slate-800/80">
+                          <button
+                            type="button"
+                            onClick={() => setShowMultiRes(!showMultiRes)}
+                            className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1.5"
+                          >
+                            <SlidersHorizontal className="w-3.5 h-3.5" />
+                            <span>{showMultiRes ? "Hide Resolution Tiers" : "Provide separate Google Drive links for 1080p & 4K (Optional)"}</span>
+                          </button>
 
-                  <div className="sm:col-span-2">
-                    <label className="block text-xs font-medium text-slate-300 mb-1">Access Tier</label>
-                    <select
-                      value={formData.isPremiumOnly ? "PREMIUM" : "FREE"}
-                      onChange={(e) => setFormData({ ...formData, isPremiumOnly: e.target.value === "PREMIUM" })}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500"
-                    >
-                      <option value="FREE">Free Tier (Ad-Supported with Google AdSense, 720p)</option>
-                      <option value="PREMIUM">VIP Premium Exclusive (No Ads, 1080p / 4K Unlocked)</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
+                          {showMultiRes && (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3 animate-fadeIn">
+                              <div>
+                                <label className="block text-[11px] text-slate-400 mb-1">1080p Full HD Drive Link</label>
+                                <input
+                                  type="text"
+                                  value={formData.driveVideo1080p}
+                                  onChange={(e) => setFormData({ ...formData, driveVideo1080p: e.target.value })}
+                                  placeholder="Optional 1080p link..."
+                                  className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 font-mono"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-[11px] text-slate-400 mb-1">4K Ultra HD Drive Link</label>
+                                <input
+                                  type="text"
+                                  value={formData.driveVideo4K}
+                                  onChange={(e) => setFormData({ ...formData, driveVideo4K: e.target.value })}
+                                  placeholder="Optional 4K link..."
+                                  className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 font-mono"
+                                />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
 
-              {/* SECTION 2: Google Drive Video Stream */}
-              <div className="space-y-3.5">
-                <div className="flex items-center space-x-2 pb-1 border-b border-slate-800 text-xs font-semibold text-slate-300">
-                  <HardDrive className="w-3.5 h-3.5 text-blue-400" />
-                  <span>2. Google Drive Video Stream (No Service Account Needed)</span>
-                </div>
-
-                <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
-                  <div>
-                    <div className="flex items-center justify-between mb-1">
-                      <label className="text-xs font-medium text-slate-200">
-                        Google Drive Video Link or File ID <span className="text-red-400">*</span>
-                      </label>
-                      {detectedFileId && (
-                        <span className="text-[11px] font-mono text-emerald-400 flex items-center gap-1">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                          File ID: {detectedFileId}
+                    {/* SECTION 3: Multi-Language Audio */}
+                    <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-4 sm:p-5 space-y-3.5">
+                      <div className="flex items-center justify-between pb-2 border-b border-slate-800 text-xs font-semibold text-slate-200">
+                        <div className="flex items-center space-x-2">
+                          <Languages className="w-4 h-4 text-blue-400" />
+                          <span>3. Multi-Language Audio Tracks</span>
+                        </div>
+                        <span className="text-[11px] text-slate-400 font-normal">
+                          {formData.audioTracks.length} Track{formData.audioTracks.length === 1 ? '' : 's'}
                         </span>
-                      )}
-                    </div>
-                    <div className="flex gap-2">
-                      <input
-                        type="text"
-                        required
-                        value={formData.googleDriveLink}
-                        onChange={(e) => {
-                          setFormData({ ...formData, googleDriveLink: e.target.value });
-                          setLinkTestStatus(null);
-                        }}
-                        placeholder="https://drive.google.com/file/d/1FMtjMgMfieoLhE-hHbli3uCxQGCrX7ZK/view?usp=sharing"
-                        className="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 font-mono focus:outline-none focus:border-blue-500 placeholder-slate-600"
-                      />
-                      <button
-                        type="button"
-                        onClick={testDriveConnection}
-                        disabled={linkTestStatus?.checking || !formData.googleDriveLink}
-                        className="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-colors shrink-0 disabled:opacity-50"
-                      >
-                        {linkTestStatus?.checking ? 'Checking...' : 'Verify Stream'}
-                      </button>
-                    </div>
-                    <p className="text-[11px] text-slate-400 mt-1">
-                      Make sure your Google Drive video has sharing set to: <strong>"Anyone with the link can view"</strong>.
-                    </p>
-                  </div>
+                      </div>
 
-                  {/* Connection Verification Box */}
-                  {linkTestStatus && (
-                    <div className={`p-2.5 rounded-lg border text-xs flex items-center space-x-2 ${
-                      linkTestStatus.success 
-                        ? 'bg-emerald-950/40 border-emerald-800/60 text-emerald-300' 
-                        : 'bg-amber-950/40 border-amber-800/60 text-amber-300'
-                    }`}>
-                      {linkTestStatus.success ? (
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                      ) : (
-                        <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
-                      )}
-                      <span>{linkTestStatus.message}</span>
-                    </div>
-                  )}
-
-                  {/* Optional Multiple Resolutions Toggle */}
-                  <div className="pt-2 border-t border-slate-800/80">
-                    <button
-                      type="button"
-                      onClick={() => setShowMultiRes(!showMultiRes)}
-                      className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1.5"
-                    >
-                      <SlidersHorizontal className="w-3.5 h-3.5" />
-                      <span>{showMultiRes ? "Hide Resolution Tiers" : "Provide separate Google Drive links for 1080p & 4K (Optional)"}</span>
-                    </button>
-
-                    {showMultiRes && (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3 animate-fadeIn">
-                        <div>
-                          <label className="block text-[11px] text-slate-400 mb-1">1080p Full HD Drive Link</label>
-                          <input
-                            type="text"
-                            value={formData.driveVideo1080p}
-                            onChange={(e) => setFormData({ ...formData, driveVideo1080p: e.target.value })}
-                            placeholder="Optional 1080p link..."
-                            className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 font-mono"
-                          />
+                      <div className="space-y-2.5">
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          <span className="text-[11px] text-slate-400 mr-1">Quick Add:</span>
+                          {[
+                            { name: 'English', code: 'en' },
+                            { name: 'Tamil', code: 'ta' },
+                            { name: 'Hindi', code: 'hi' },
+                            { name: 'Spanish', code: 'es' },
+                            { name: 'Telugu', code: 'te' },
+                            { name: 'Malayalam', code: 'ml' },
+                            { name: 'French', code: 'fr' }
+                          ].map(lang => (
+                            <button
+                              key={lang.code}
+                              type="button"
+                              onClick={() => quickAddLanguage(lang.name, lang.code)}
+                              className="px-2 py-1 rounded bg-slate-900 hover:bg-slate-800 text-slate-300 text-[11px] font-medium border border-slate-800 transition-colors"
+                            >
+                              + {lang.name}
+                            </button>
+                          ))}
                         </div>
-                        <div>
-                          <label className="block text-[11px] text-slate-400 mb-1">4K Ultra HD Drive Link</label>
-                          <input
-                            type="text"
-                            value={formData.driveVideo4K}
-                            onChange={(e) => setFormData({ ...formData, driveVideo4K: e.target.value })}
-                            placeholder="Optional 4K link..."
-                            className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 font-mono"
-                          />
+
+                        <div className="space-y-2 max-h-44 overflow-y-auto pr-1">
+                          {formData.audioTracks.map((track, idx) => (
+                            <div key={track.id} className="p-2.5 rounded-lg bg-slate-900 border border-slate-800/80 flex items-center gap-2">
+                              <span className="w-5 h-5 rounded bg-slate-800 text-slate-300 flex items-center justify-center text-[10px] font-bold shrink-0">
+                                {idx + 1}
+                              </span>
+                              <div className="w-24 shrink-0">
+                                <span className="text-xs font-medium text-slate-200">{track.languageName}</span>
+                                <span className="text-[10px] text-slate-500 uppercase ml-1">({track.languageCode})</span>
+                              </div>
+                              <input
+                                type="text"
+                                value={track.driveLink}
+                                onChange={(e) => {
+                                  const updated = [...formData.audioTracks];
+                                  updated[idx].driveLink = e.target.value;
+                                  setFormData({ ...formData, audioTracks: updated });
+                                }}
+                                placeholder="Google Drive audio link or ID (or empty for default)"
+                                className="flex-1 bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-xs text-slate-200 font-mono placeholder-slate-600 focus:outline-none focus:border-blue-500"
+                              />
+                              {formData.audioTracks.length > 1 && (
+                                <button
+                                  type="button"
+                                  onClick={() => handleRemoveAudioTrack(idx)}
+                                  className="p-1 rounded text-slate-500 hover:text-red-400 transition-colors"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              )}
+                            </div>
+                          ))}
                         </div>
                       </div>
-                    )}
-                  </div>
-                </div>
-              </div>
+                    </div>
 
-              {/* SECTION 3: Multi-Language Audio Tracks */}
-              <div className="space-y-3.5">
-                <div className="flex items-center justify-between pb-1 border-b border-slate-800 text-xs font-semibold text-slate-300">
-                  <div className="flex items-center space-x-2">
-                    <Languages className="w-3.5 h-3.5 text-blue-400" />
-                    <span>3. Multi-Language Audio (Google Drive)</span>
-                  </div>
-                  <span className="text-[11px] text-slate-400 font-normal">
-                    {formData.audioTracks.length} Track{formData.audioTracks.length === 1 ? '' : 's'} Configured
-                  </span>
-                </div>
-
-                <div className="space-y-2.5">
-                  {/* Quick-add language buttons */}
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    <span className="text-[11px] text-slate-400 mr-1">Quick Add:</span>
-                    {[
-                      { name: 'English', code: 'en' },
-                      { name: 'Tamil', code: 'ta' },
-                      { name: 'Hindi', code: 'hi' },
-                      { name: 'Spanish', code: 'es' },
-                      { name: 'Telugu', code: 'te' },
-                      { name: 'Malayalam', code: 'ml' },
-                      { name: 'French', code: 'fr' }
-                    ].map(lang => (
-                      <button
-                        key={lang.code}
-                        type="button"
-                        onClick={() => quickAddLanguage(lang.name, lang.code)}
-                        className="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] font-medium transition-colors"
-                      >
-                        + {lang.name}
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Configured audio track list */}
-                  {formData.audioTracks.map((track, idx) => (
-                    <div key={track.id} className="p-2.5 rounded-lg bg-slate-950 border border-slate-800 flex items-center gap-2.5">
-                      <span className="w-6 h-6 rounded bg-slate-800 text-slate-300 flex items-center justify-center text-xs font-bold shrink-0">
-                        {idx + 1}
-                      </span>
-                      <div className="w-28 shrink-0">
-                        <span className="text-xs font-semibold text-slate-200">{track.languageName}</span>
-                        <span className="text-[10px] text-slate-500 uppercase ml-1">({track.languageCode})</span>
+                    {/* SECTION 4: Subtitles */}
+                    <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-4 sm:p-5 space-y-3.5">
+                      <div className="flex items-center justify-between pb-2 border-b border-slate-800 text-xs font-semibold text-slate-200">
+                        <div className="flex items-center space-x-2">
+                          <Subtitles className="w-4 h-4 text-emerald-400" />
+                          <span>4. Subtitles (.vtt / Google Drive)</span>
+                        </div>
+                        <span className="text-[11px] text-slate-400 font-normal">
+                          {formData.subtitles.length} Subtitle{formData.subtitles.length === 1 ? '' : 's'}
+                        </span>
                       </div>
-                      <input
-                        type="text"
-                        value={track.driveLink}
-                        onChange={(e) => {
-                          const updated = [...formData.audioTracks];
-                          updated[idx].driveLink = e.target.value;
-                          setFormData({ ...formData, audioTracks: updated });
-                        }}
-                        placeholder="Google Drive audio link or ID (Leave empty to use main video audio)"
-                        className="flex-1 bg-slate-900 border border-slate-700/80 rounded px-2.5 py-1.5 text-xs text-slate-200 font-mono placeholder-slate-600"
-                      />
-                      {formData.audioTracks.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveAudioTrack(idx)}
-                          className="p-1 rounded text-slate-500 hover:text-red-400"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      )}
+
+                      <div className="space-y-2.5">
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          <span className="text-[11px] text-slate-400 mr-1">Add:</span>
+                          {[
+                            { name: 'English [CC]', code: 'en' },
+                            { name: 'Tamil [CC]', code: 'ta' },
+                            { name: 'Hindi [CC]', code: 'hi' },
+                            { name: 'Spanish [CC]', code: 'es' }
+                          ].map(sub => (
+                            <button
+                              key={sub.code}
+                              type="button"
+                              onClick={() => quickAddSubtitle(sub.name, sub.code)}
+                              className="px-2 py-1 rounded bg-slate-900 hover:bg-slate-800 text-slate-300 text-[11px] font-medium border border-slate-800 transition-colors"
+                            >
+                              + {sub.name}
+                            </button>
+                          ))}
+                        </div>
+
+                        {formData.subtitles.length > 0 ? (
+                          <div className="space-y-2 max-h-36 overflow-y-auto pr-1">
+                            {formData.subtitles.map((sub, idx) => (
+                              <div key={sub.id} className="p-2 rounded-lg bg-slate-900 border border-slate-800/80 flex items-center gap-2">
+                                <span className="w-24 text-xs font-medium text-slate-200 shrink-0">
+                                  {sub.languageName}
+                                </span>
+                                <input
+                                  type="text"
+                                  value={sub.driveLink}
+                                  onChange={(e) => {
+                                    const updated = [...formData.subtitles];
+                                    updated[idx].driveLink = e.target.value;
+                                    setFormData({ ...formData, subtitles: updated });
+                                  }}
+                                  placeholder="Google Drive .vtt link or ID"
+                                  className="flex-1 bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-xs text-slate-200 font-mono placeholder-slate-600 focus:outline-none focus:border-blue-500"
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => handleRemoveSubtitle(idx)}
+                                  className="p-1 rounded text-slate-500 hover:text-red-400 transition-colors"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="text-[11px] text-slate-500 italic">No subtitles attached yet. Click above to add caption tracks.</p>
+                        )}
+                      </div>
                     </div>
-                  ))}
+
+                  </div>
                 </div>
               </div>
 
-              {/* SECTION 4: Subtitles */}
-              <div className="space-y-3.5">
-                <div className="flex items-center justify-between pb-1 border-b border-slate-800 text-xs font-semibold text-slate-300">
-                  <div className="flex items-center space-x-2">
-                    <Subtitles className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>4. Subtitles (.vtt / Google Drive)</span>
-                  </div>
-                  <span className="text-[11px] text-slate-400 font-normal">
-                    {formData.subtitles.length} Subtitles
-                  </span>
+              {/* Dedicated Sticky Bottom Footer (Never overlaps content!) */}
+              <div className="px-6 py-4 bg-slate-950/95 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
+                <p className="text-xs text-slate-400 text-center sm:text-left">
+                  Stream updates sync instantly with the live viewer video catalog.
+                </p>
+                <div className="flex items-center space-x-3 w-full sm:w-auto justify-end">
+                  <button
+                    type="button"
+                    onClick={() => setIsFormOpen(false)}
+                    className="px-4 py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-colors btn-press"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-sm transition-colors flex items-center space-x-1.5 btn-press"
+                  >
+                    <Check className="w-4 h-4" />
+                    <span>Publish Video to Live Catalog</span>
+                  </button>
                 </div>
-
-                <div className="space-y-2">
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    <span className="text-[11px] text-slate-400 mr-1">Add Subtitle:</span>
-                    {[
-                      { name: 'English [CC]', code: 'en' },
-                      { name: 'Tamil [CC]', code: 'ta' },
-                      { name: 'Hindi [CC]', code: 'hi' },
-                      { name: 'Spanish [CC]', code: 'es' }
-                    ].map(sub => (
-                      <button
-                        key={sub.code}
-                        type="button"
-                        onClick={() => quickAddSubtitle(sub.name, sub.code)}
-                        className="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] font-medium transition-colors"
-                      >
-                        + {sub.name}
-                      </button>
-                    ))}
-                  </div>
-
-                  {formData.subtitles.map((sub, idx) => (
-                    <div key={sub.id} className="p-2.5 rounded-lg bg-slate-950 border border-slate-800 flex items-center gap-2.5">
-                      <span className="w-28 text-xs font-semibold text-slate-200 shrink-0">
-                        {sub.languageName}
-                      </span>
-                      <input
-                        type="text"
-                        value={sub.driveLink}
-                        onChange={(e) => {
-                          const updated = [...formData.subtitles];
-                          updated[idx].driveLink = e.target.value;
-                          setFormData({ ...formData, subtitles: updated });
-                        }}
-                        placeholder="Google Drive .vtt link or ID"
-                        className="flex-1 bg-slate-900 border border-slate-700/80 rounded px-2.5 py-1.5 text-xs text-slate-200 font-mono placeholder-slate-600"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveSubtitle(idx)}
-                        className="p-1 rounded text-slate-500 hover:text-red-400"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Form Action Buttons */}
-              <div className="pt-4 border-t border-slate-800 flex items-center justify-end space-x-3 sticky bottom-0 bg-slate-900/95 py-2">
-                <button
-                  type="button"
-                  onClick={() => setIsFormOpen(false)}
-                  className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-sm transition-colors flex items-center space-x-1.5"
-                >
-                  <Check className="w-4 h-4" />
-                  <span>Publish Video to Live Catalog</span>
-                </button>
               </div>
             </form>
           </div>
