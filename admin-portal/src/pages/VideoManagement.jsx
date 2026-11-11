@@ -54,7 +54,6 @@ export default function VideoManagement() {
     description: '',
     thumbnailUrl: '',
     genre: 'Action',
-    durationMinutes: '120',
     isPremiumOnly: false,
     googleDriveLink: '',
     driveVideo1080p: '',
@@ -177,7 +176,7 @@ export default function VideoManagement() {
       thumbnailUrl: defaultThumbnail,
       bannerUrl: defaultThumbnail,
       genre: formData.genre.trim() || 'General',
-      durationSeconds: (parseInt(formData.durationMinutes) || 120) * 60,
+      durationSeconds: 7200,
       isPremiumOnly: formData.isPremiumOnly,
       qualityTiers: {
         freeCapped: "720p",
@@ -224,7 +223,6 @@ export default function VideoManagement() {
       description: '',
       thumbnailUrl: '',
       genre: 'Action',
-      durationMinutes: '120',
       isPremiumOnly: false,
       googleDriveLink: '',
       driveVideo1080p: '',
@@ -398,27 +396,16 @@ export default function VideoManagement() {
                       </div>
 
                       <div>
-                        <label className="block text-xs font-medium text-slate-300 mb-1.5">Duration (Minutes)</label>
-                        <input
-                          type="number"
-                          value={formData.durationMinutes}
-                          onChange={(e) => setFormData({ ...formData, durationMinutes: e.target.value })}
-                          placeholder="120"
-                          className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none rounded-xl px-3.5 py-2.5 text-xs text-slate-100 placeholder-slate-500 transition-colors"
-                        />
+                        <label className="block text-xs font-medium text-slate-300 mb-1.5">Access Tier</label>
+                        <select
+                          value={formData.isPremiumOnly ? "PREMIUM" : "FREE"}
+                          onChange={(e) => setFormData({ ...formData, isPremiumOnly: e.target.value === "PREMIUM" })}
+                          className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none rounded-xl px-3.5 py-2.5 text-xs text-slate-100 transition-colors"
+                        >
+                          <option value="FREE">Free Tier (Standard HD 720p)</option>
+                          <option value="PREMIUM">VIP Premium Exclusive (Ultra HD 1080p & 4K Unlocked)</option>
+                        </select>
                       </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-medium text-slate-300 mb-1.5">Access Tier</label>
-                      <select
-                        value={formData.isPremiumOnly ? "PREMIUM" : "FREE"}
-                        onChange={(e) => setFormData({ ...formData, isPremiumOnly: e.target.value === "PREMIUM" })}
-                        className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none rounded-xl px-3.5 py-2.5 text-xs text-slate-100 transition-colors"
-                      >
-                        <option value="FREE">Free Tier (Standard HD 720p)</option>
-                        <option value="PREMIUM">VIP Premium Exclusive (Ultra HD 1080p & 4K Unlocked)</option>
-                      </select>
                     </div>
 
                     <div>
@@ -862,11 +849,6 @@ export default function VideoManagement() {
                           <span className="flex items-center gap-1 font-mono text-slate-300">
                             <HardDrive className="w-3 h-3 text-blue-400" />
                             Drive ID: {driveId || 'N/A'}
-                          </span>
-                          <span>&bull;</span>
-                          <span className="flex items-center gap-1">
-                            <Clock className="w-3 h-3 text-slate-400" />
-                            {Math.round((video.durationSeconds || 7200) / 60)} mins
                           </span>
                           <span>&bull;</span>
                           <span className="flex items-center gap-1">
