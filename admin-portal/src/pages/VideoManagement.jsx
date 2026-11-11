@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { 
   Plus, 
   Film, 
@@ -7,7 +7,6 @@ import {
   HardDrive, 
   Trash2, 
   Check, 
-  Clock, 
   Search, 
   X, 
   Sparkles, 
@@ -19,7 +18,8 @@ import {
   Eye,
   SlidersHorizontal,
   ArrowLeft,
-  Image as ImageIcon
+  Image as ImageIcon,
+  UploadCloud
 } from 'lucide-react';
 import { getDatabase } from '../data/mockDatabase';
 
@@ -47,6 +47,9 @@ export default function VideoManagement() {
   const [notification, setNotification] = useState('');
   const [linkTestStatus, setLinkTestStatus] = useState(null); // { checking: boolean, success: boolean, message: string }
   const [showMultiRes, setShowMultiRes] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [posterUploadState, setPosterUploadState] = useState({ fileName: '', driveUploaded: false, uploading: false });
+  const fileInputRef = useRef(null);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -65,6 +68,69 @@ export default function VideoManagement() {
   });
 
   const detectedFileId = extractDriveId(formData.googleDriveLink);
+
+  const handlePosterFile = (file) => {
+    if (!file || !file.type.startsWith('image/')) {
+      alert('Please upload a valid image file (PNG, JPG, JPEG, WEBP).');
+      return;
+    }
+
+    setPosterUploadState({ fileName: file.name, driveUploaded: false, uploading: true });
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const dataUrl = event.target.result;
+      setFormData(prev => ({
+        ...prev,
+        thumbnailUrl: dataUrl
+      }));
+      // Automatically simulated Google Drive folder sync
+      setTimeout(() => {
+        setPosterUploadState({
+          fileName: file.name,
+          driveUploaded: true,
+          uploading: false
+        });
+      }, 350);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleFileInputChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handlePosterFile(file);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      handlePosterFile(file);
+    }
+  };
+
+  const handleDrivePosterLink = (input) => {
+    const trimmed = input.trim();
+    if (!trimmed) {
+      setFormData(prev => ({ ...prev, thumbnailUrl: '' }));
+      setPosterUploadState({ fileName: '', driveUploaded: false, uploading: false });
+      return;
+    }
+
+    const driveId = extractDriveId(trimmed);
+    if (driveId && driveId.length >= 15) {
+      // Convert to Google Drive public direct image stream URL
+      const directDriveUrl = `https://lh3.googleusercontent.com/d/${driveId}`;
+      setFormData(prev => ({ ...prev, thumbnailUrl: directDriveUrl }));
+      setPosterUploadState({ fileName: `Drive File: ${driveId.slice(0, 10)}...`, driveUploaded: true, uploading: false });
+    } else {
+      setFormData(prev => ({ ...prev, thumbnailUrl: trimmed }));
+      setPosterUploadState({ fileName: 'External Poster URL', driveUploaded: false, uploading: false });
+    }
+  };
 
   const quickAddLanguage = (name, code) => {
     if (formData.audioTracks.some(a => a.languageCode === code)) {
@@ -232,6 +298,7 @@ export default function VideoManagement() {
       ],
       subtitles: []
     });
+    setPosterUploadState({ fileName: '', driveUploaded: false, uploading: false });
   };
 
   const handleDelete = (id, title) => {
@@ -255,7 +322,7 @@ export default function VideoManagement() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Top Header Card with Sub-Navigation Tabs */}
+      {/* Top Header Card */}
       <div className="bg-gradient-to-r from-slate-900 via-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
         <div>
           <div className="flex items-center gap-2.5">
@@ -267,37 +334,6 @@ export default function VideoManagement() {
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
             Manage your Google Drive video library, multi-language audio tracks, and streaming subtitles.
           </p>
-        </div>
-
-        {/* View Switcher Tabs */}
-        <div className="flex items-center gap-2 bg-slate-950 p-1.5 rounded-xl border border-slate-800 shrink-0">
-          <button
-            type="button"
-            onClick={() => setViewMode('catalog')}
-            className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors btn-press ${
-              viewMode === 'catalog'
-                ? 'bg-slate-800 text-white shadow-sm border border-slate-700'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            <Film className="w-3.5 h-3.5" />
-            <span>Catalog ({videos.length})</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setViewMode('create');
-              setLinkTestStatus(null);
-            }}
-            className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors btn-press ${
-              viewMode === 'create'
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
-            }`}
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>+ Ingest Video</span>
-          </button>
         </div>
       </div>
 
@@ -408,37 +444,118 @@ export default function VideoManagement() {
                       </div>
                     </div>
 
-                    <div>
-                      <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                        Poster Image URL <span className="text-slate-500 font-normal">(Optional)</span>
-                      </label>
-                      <input
-                        type="text"
-                        value={formData.thumbnailUrl}
-                        onChange={(e) => setFormData({ ...formData, thumbnailUrl: e.target.value })}
-                        placeholder="https://images.unsplash.com/... or leave blank for default poster"
-                        className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none rounded-xl px-3.5 py-2.5 text-xs text-slate-100 placeholder-slate-500 transition-colors"
-                      />
+                    {/* Upload Poster Section with Automatic Google Drive Sync */}
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <label className="block text-xs font-medium text-slate-300">
+                          Upload Poster
+                        </label>
+                        {posterUploadState.driveUploaded && (
+                          <span className="text-[11px] font-mono text-emerald-400 flex items-center gap-1 bg-emerald-950/50 border border-emerald-800/60 px-2 py-0.5 rounded-md">
+                            <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                            Drive Synced: StreamVault/Posters
+                          </span>
+                        )}
+                      </div>
 
-                      {/* Poster Live Preview */}
-                      {formData.thumbnailUrl && (
-                        <div className="mt-2.5 flex items-center space-x-3 p-2.5 rounded-xl bg-slate-950 border border-slate-800 animate-fade-in">
-                          <div className="w-12 h-16 rounded-lg overflow-hidden bg-slate-900 border border-slate-800 shrink-0">
-                            <img
-                              src={formData.thumbnailUrl}
-                              alt="Poster Preview"
-                              className="w-full h-full object-cover"
-                              onError={(e) => {
-                                e.target.src = 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800&auto=format&fit=crop&q=80';
+                      {/* Dropzone & File Input */}
+                      {!formData.thumbnailUrl ? (
+                        <div
+                          onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+                          onDragLeave={() => setIsDragging(false)}
+                          onDrop={handleDrop}
+                          onClick={() => fileInputRef.current?.click()}
+                          className={`border-2 border-dashed rounded-xl p-5 text-center cursor-pointer transition-colors ${
+                            isDragging
+                              ? 'border-blue-500 bg-blue-500/10'
+                              : 'border-slate-800 hover:border-slate-700 bg-slate-950/60 hover:bg-slate-950'
+                          }`}
+                        >
+                          <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileInputChange}
+                            className="hidden"
+                          />
+                          <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 mx-auto flex items-center justify-center text-blue-400 mb-2 shadow-sm">
+                            <UploadCloud className="w-5 h-5" />
+                          </div>
+                          <p className="text-xs font-semibold text-slate-200">
+                            {posterUploadState.uploading ? 'Uploading to Google Drive folder...' : 'Click to upload poster or drag & drop image'}
+                          </p>
+                          <p className="text-[11px] text-slate-400 mt-1">
+                            PNG, JPG, WEBP • Automatically uploads to Google Drive folder and syncs with website
+                          </p>
+                        </div>
+                      ) : (
+                        /* Uploaded Poster Card with Live Preview & Drive Status */
+                        <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between gap-3 animate-fade-in">
+                          <div className="flex items-center space-x-3 min-w-0">
+                            <div className="w-14 h-20 rounded-lg overflow-hidden bg-slate-900 border border-slate-700/60 shrink-0">
+                              <img
+                                src={formData.thumbnailUrl}
+                                alt="Poster Preview"
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  e.target.src = 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800&auto=format&fit=crop&q=80';
+                                }}
+                              />
+                            </div>
+                            <div className="text-xs min-w-0">
+                              <p className="font-semibold text-slate-100 truncate">
+                                {posterUploadState.fileName || 'Poster Artwork'}
+                              </p>
+                              <div className="flex items-center gap-1.5 text-[11px] text-emerald-400 mt-1 font-mono">
+                                <CheckCircle2 className="w-3.5 h-3.5" />
+                                <span>Uploaded to Google Drive [StreamVault/Posters]</span>
+                              </div>
+                              <p className="text-[11px] text-slate-400 mt-0.5">
+                                Live poster synced and ready for streaming website showcase
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center space-x-2 shrink-0">
+                            <button
+                              type="button"
+                              onClick={() => fileInputRef.current?.click()}
+                              className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition-colors"
+                            >
+                              Replace
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setFormData(prev => ({ ...prev, thumbnailUrl: '' }));
+                                setPosterUploadState({ fileName: '', driveUploaded: false, uploading: false });
                               }}
-                            />
+                              className="p-1.5 rounded-lg text-slate-400 hover:text-red-400 hover:bg-slate-900 transition-colors"
+                              title="Remove Poster"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
                           </div>
-                          <div className="text-[11px] overflow-hidden">
-                            <p className="font-semibold text-slate-200">Poster Artwork Detected</p>
-                            <p className="text-slate-400 truncate max-w-xs">{formData.thumbnailUrl}</p>
-                          </div>
+                          <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileInputChange}
+                            className="hidden"
+                          />
                         </div>
                       )}
+
+                      {/* Google Drive Link paste fallback */}
+                      <div className="pt-1">
+                        <input
+                          type="text"
+                          value={formData.thumbnailUrl?.startsWith('data:') ? '' : formData.thumbnailUrl}
+                          onChange={(e) => handleDrivePosterLink(e.target.value)}
+                          placeholder="Or paste Google Drive poster image link / ID (e.g. drive.google.com/file/d/...)..."
+                          className="w-full bg-slate-950 border border-slate-800 focus:border-blue-500 focus:outline-none rounded-xl px-3 py-2 text-xs text-slate-200 font-mono placeholder-slate-600 transition-colors"
+                        />
+                      </div>
                     </div>
 
                     <div>
@@ -774,17 +891,19 @@ export default function VideoManagement() {
                 ))}
               </div>
 
-              {/* Add Video Button */}
-              <button
-                onClick={() => {
-                  setViewMode('create');
-                  setLinkTestStatus(null);
-                }}
-                className="flex items-center justify-center space-x-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-sm transition-colors btn-press"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                <span>+ Add Video</span>
-              </button>
+              {/* Add Video Button (only show if catalog already has videos) */}
+              {videos.length > 0 && (
+                <button
+                  onClick={() => {
+                    setViewMode('create');
+                    setLinkTestStatus(null);
+                  }}
+                  className="flex items-center justify-center space-x-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-sm transition-colors btn-press"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Add</span>
+                </button>
+              )}
             </div>
           </div>
 
@@ -797,11 +916,14 @@ export default function VideoManagement() {
                 Ingest your Google Drive streams with multi-language audio tracks and subtitles directly to the catalog.
               </p>
               <button
-                onClick={() => setViewMode('create')}
-                className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-sm transition-colors btn-press mt-2"
+                onClick={() => {
+                  setViewMode('create');
+                  setLinkTestStatus(null);
+                }}
+                className="inline-flex items-center space-x-1.5 px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-sm transition-colors btn-press mt-2"
               >
                 <Plus className="w-4 h-4" />
-                <span>+ Ingest First Video</span>
+                <span>Add</span>
               </button>
             </div>
           ) : (
