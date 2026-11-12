@@ -1,12 +1,44 @@
 {
-  "videos": [],
+  "videos": [
+    {
+      "id": "vid-jujutsu-kaisen",
+      "title": "Jujutsu Kaisen",
+      "description": "Action and adventure brooo",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&auto=format&fit=crop&q=80",
+      "bannerUrl": "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=1600&auto=format&fit=crop&q=80",
+      "genre": "Action",
+      "durationSeconds": 7200,
+      "isPremiumOnly": false,
+      "qualityTiers": {
+        "freeCapped": "720p",
+        "premiumUnlocked": ["1080p", "4K HDR"]
+      },
+      "driveFileIds": {
+        "videoDefault": "1eYdIEDowaxnXXDGOPAQrWGqh1io2nm50",
+        "video1080p": "1eYdIEDowaxnXXDGOPAQrWGqh1io2nm50",
+        "video4K": "1eYdIEDowaxnXXDGOPAQrWGqh1io2nm50"
+      },
+      "audioTracks": [
+        {
+          "id": "aud-en",
+          "languageCode": "en",
+          "languageName": "English",
+          "driveFileId": "1eYdIEDowaxnXXDGOPAQrWGqh1io2nm50",
+          "isDefault": true
+        }
+      ],
+      "subtitles": [],
+      "viewsCount": 1,
+      "uploadedAt": "2026-11-12T19:00:00.000Z"
+    }
+  ],
   "coupons": [],
   "users": [],
   "settings": {
     "googleDriveServiceAccountEmail": "",
-    "isGoogleDriveConnected": false,
-    "driveStorageQuotaGB": 0,
-    "driveStorageUsedGB": 0,
+    "isGoogleDriveConnected": true,
+    "driveStorageQuotaGB": 100,
+    "driveStorageUsedGB": 1.2,
     "adSensePublisherId": "pub-2509450853164699",
     "enablePreRollAds": true,
     "enableMidRollAds": true,
@@ -20,11 +52,11 @@
     "allowOfflineDownloads": true
   },
   "metrics": {
-    "totalRegisteredUsers": 0,
+    "totalRegisteredUsers": 1,
     "activePaidSubscriptions": 0,
     "monthlyRecurringRevenueUSD": 0,
-    "dailyActiveViewers": 0,
-    "totalVideoHoursStreamed": 0,
+    "dailyActiveViewers": 1,
+    "totalVideoHoursStreamed": 2,
     "estimatedAdRevenueUSD": 0,
     "adImpressionsDelivered": 0,
     "inAppOfflineDownloadsActive": 0
