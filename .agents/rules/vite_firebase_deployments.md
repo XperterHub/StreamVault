@@ -21,3 +21,4 @@ When building a Vite app with `base: '/<subpath>/'` (e.g. `/admin/`):
 ## 3. Windows Path Casing for Next.js
 - On Windows systems, always execute build scripts with uppercase drive letters (`cd /d C:\...`).
 - Never mix lowercase `c:\` and uppercase `C:\` to prevent duplicate React instances and SSR dispatcher crashes (`TypeError: Cannot read properties of null (reading 'useMemo')`).
+
