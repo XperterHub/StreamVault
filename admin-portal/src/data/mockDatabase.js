@@ -10,7 +10,7 @@ const STORAGE_KEYS = {
   METRICS: 'streamvault_admin_metrics'
 };
 
-const SYNC_API_URL = 'http://localhost:3000/api/sync';
+const SYNC_API_URL = typeof window !== 'undefined' ? `${window.location.origin}/api/sync` : '/api/sync';
 
 // Clean initial data - Strictly empty
 export const INITIAL_VIDEOS = [];
@@ -115,6 +115,7 @@ export const getDatabase = () => {
       full.videos = videos;
       syncToViewerPortal(full);
       window.dispatchEvent(new Event('streamvault_data_updated'));
+      window.dispatchEvent(new CustomEvent('streamvault-sync'));
     },
     getCoupons: () => {
       const saved = localStorage.getItem(STORAGE_KEYS.COUPONS);

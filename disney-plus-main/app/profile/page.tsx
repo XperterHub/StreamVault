@@ -6,18 +6,23 @@ import shuffleMedias from "../../helpers/shuffle-medias";
 import api from "../../library/api";
 
 const Page = async () => {
-  const popularMovies = await api.get.medias.group({
-    name: "popular",
-    type: "movies",
-    page: 1,
-  });
-  const popularSeries = await api.get.medias.group({
-    name: "popular",
-    type: "series",
-    page: 1,
-  });
-
-  const popularMedias = shuffleMedias([...popularMovies, ...popularSeries]);
+  let popularMedias: any[] = [];
+  try {
+    const popularMovies = await api.get.medias.group({
+      name: "popular",
+      type: "movies",
+      page: 1,
+    });
+    const popularSeries = await api.get.medias.group({
+      name: "popular",
+      type: "series",
+      page: 1,
+    });
+    popularMedias = shuffleMedias([...popularMovies, ...popularSeries]);
+  } catch (e) {
+    // If API fails, show empty collection — profile still renders
+    popularMedias = [];
+  }
 
   return (
     <>
@@ -25,11 +30,13 @@ const Page = async () => {
       <Content variant="secondary">
         {/* @ts-ignore */}
         <User />
-        <Collection.Landscape
-          name="Just for you"
-          medias={popularMedias}
-          isOnlyGrid
-        />
+        {popularMedias.length > 0 && (
+          <Collection.Landscape
+            name="Just for you"
+            medias={popularMedias}
+            isOnlyGrid
+          />
+        )}
       </Content>
     </>
   );

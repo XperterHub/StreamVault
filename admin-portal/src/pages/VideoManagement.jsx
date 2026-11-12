@@ -19,7 +19,8 @@ import {
   SlidersHorizontal,
   ArrowLeft,
   Image as ImageIcon,
-  UploadCloud
+  UploadCloud,
+  Pencil
 } from 'lucide-react';
 import { getDatabase } from '../data/mockDatabase';
 
@@ -42,6 +43,7 @@ export default function VideoManagement() {
   const db = getDatabase();
   const [videos, setVideos] = useState(db.getVideos());
   const [viewMode, setViewMode] = useState('catalog'); // 'catalog' | 'create'
+  const [editingVideo, setEditingVideo] = useState(null); // null = new video, object = editing existing
   const [searchTerm, setSearchTerm] = useState('');
   const [tierFilter, setTierFilter] = useState('ALL'); // 'ALL' | 'FREE' | 'PREMIUM'
   const [notification, setNotification] = useState('');
@@ -194,7 +196,7 @@ export default function VideoManagement() {
     setLinkTestStatus({ checking: true, success: false, message: 'Connecting to Google Drive direct stream...' });
 
     try {
-      const response = await fetch(`http://localhost:3000/api/stream?id=${encodeURIComponent(detectedFileId)}`, {
+      const response = await fetch(`/api/stream?id=${encodeURIComponent(detectedFileId)}`, {
         headers: { Range: 'bytes=0-1000' }
       });
 
@@ -235,8 +237,8 @@ export default function VideoManagement() {
 
     const defaultThumbnail = formData.thumbnailUrl.trim() || 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800&auto=format&fit=crop&q=80';
 
-    const newVideo = {
-      id: `vid-${Date.now()}`,
+    const videoData = {
+      id: editingVideo ? editingVideo.id : `vid-${Date.now()}`,
       title: formData.title.trim(),
       description: formData.description.trim() || 'Streaming exclusively on StreamVault.',
       thumbnailUrl: defaultThumbnail,
@@ -271,16 +273,23 @@ export default function VideoManagement() {
           driveFileId: extractDriveId(s.driveLink)
         })),
       adBreakSeconds: [300, 900],
-      viewsCount: 0,
-      uploadedAt: new Date().toISOString()
+      viewsCount: editingVideo ? (editingVideo.viewsCount || 0) : 0,
+      uploadedAt: editingVideo ? editingVideo.uploadedAt : new Date().toISOString()
     };
 
-    const updated = [newVideo, ...videos];
+    let updated;
+    if (editingVideo) {
+      updated = videos.map(v => v.id === editingVideo.id ? videoData : v);
+      setNotification(`Updated "${videoData.title}" — changes are live on the Viewer Portal.`);
+    } else {
+      updated = [videoData, ...videos];
+      setNotification(`Successfully published "${videoData.title}"! Immediately available on Viewer Portal.`);
+    }
     setVideos(updated);
     db.saveVideos(updated);
     setViewMode('catalog');
+    setEditingVideo(null);
     setLinkTestStatus(null);
-    setNotification(`Successfully published "${formData.title}"! Immediately available on Viewer Portal.`);
     setTimeout(() => setNotification(''), 4000);
 
     // Reset Form
@@ -366,20 +375,20 @@ export default function VideoManagement() {
               </button>
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-base sm:text-lg font-bold text-slate-100">Ingest New Video Stream</h3>
+                  <h3 className="text-base sm:text-lg font-bold text-slate-100">{editingVideo ? 'Edit Video Stream' : 'Add New Video Stream'}</h3>
                   <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                    Studio Ingestion
+                    {editingVideo ? 'Editing' : 'Studio Ingestion'}
                   </span>
                 </div>
                 <p className="text-xs text-slate-400 mt-0.5">
-                  Publish your Google Drive video stream with multi-resolution tiers, audio tracks, and subtitles.
+                  {editingVideo ? `Updating "${editingVideo.title}" — changes go live immediately.` : 'Publish your Google Drive video stream with multi-resolution tiers, audio tracks, and subtitles.'}
                 </p>
               </div>
             </div>
 
             <button
               type="button"
-              onClick={() => setViewMode('catalog')}
+              onClick={() => { setViewMode('catalog'); setEditingVideo(null); }}
               className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-colors shrink-0 self-start md:self-auto btn-press"
             >
               ← Back to Catalog
@@ -836,7 +845,7 @@ export default function VideoManagement() {
                   className="px-6 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-sm transition-colors flex items-center space-x-2 btn-press"
                 >
                   <Check className="w-4 h-4" />
-                  <span>Publish Video to Live Catalog</span>
+                  <span>{editingVideo ? 'Update Video' : 'Publish Video to Live Catalog'}</span>
                 </button>
               </div>
             </div>
@@ -983,12 +992,39 @@ export default function VideoManagement() {
 
                     {/* Actions */}
                     <div className="flex items-center space-x-2 shrink-0 self-end sm:self-center">
+                      {/* Edit Button */}
+                      <button
+                        onClick={() => {
+                          setEditingVideo(video);
+                          setFormData({
+                            title: video.title,
+                            description: video.description,
+                            thumbnailUrl: video.thumbnailUrl,
+                            genre: video.genre || 'Action',
+                            isPremiumOnly: video.isPremiumOnly,
+                            googleDriveLink: video.driveFileIds?.videoDefault || '',
+                            driveVideo1080p: video.driveFileIds?.video1080p || '',
+                            driveVideo4K: video.driveFileIds?.video4K || '',
+                            audioTracks: video.audioTracks?.map(a => ({ ...a, driveLink: a.driveFileId || '' })) || [{ id: 'aud-en', languageCode: 'en', languageName: 'English', driveLink: '', isDefault: true }],
+                            subtitles: video.subtitles?.map(s => ({ ...s, driveLink: s.driveFileId || '' })) || []
+                          });
+                          setPosterUploadState({ fileName: '', driveUploaded: !!video.thumbnailUrl, uploading: false });
+                          setShowMultiRes(false);
+                          setLinkTestStatus(null);
+                          setViewMode('create');
+                        }}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-blue-400 hover:bg-slate-800 transition-colors btn-press"
+                        title="Edit Video"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </button>
+
                       <a
-                        href="http://localhost:3000"
+                        href="https://gen-lang-client-0020597755.web.app"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-blue-600/15 hover:bg-blue-600/25 border border-blue-500/30 text-blue-300 text-xs font-semibold transition-colors btn-press"
-                        title="Watch on Viewer Streaming Portal (Port 3000)"
+                        title="Watch on Viewer Streaming Portal"
                       >
                         <Play className="w-3.5 h-3.5 fill-blue-300" />
                         <span>Watch in Viewer</span>

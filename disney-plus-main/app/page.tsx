@@ -5,6 +5,7 @@ import Content from "../components/layouts/content";
 import api from "../library/api";
 import Collection from "../components/sections/collection";
 import data from "../library/data";
+import StreamVaultCatalog from "../components/sections/streamvault-catalog";
 
 const Page = async () => {
   const spotlightMedia = await api.get.media.spotlight({ type: "all" });
@@ -19,6 +20,8 @@ const Page = async () => {
         <Showcase media={spotlightMedia} isMediaSelected={false} />
         <Content isSpacerOnly>
           <Franchise />
+          {/* StreamVault Admin Videos — reads from localStorage, updates live */}
+          <StreamVaultCatalog />
           {collections.map(({ id, name, medias }) => (
             <Collection.Portrait key={id} name={name} medias={medias} />
           ))}

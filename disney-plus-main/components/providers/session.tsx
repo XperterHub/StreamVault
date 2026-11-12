@@ -1,6 +1,5 @@
 "use client";
 
-import { SessionProvider } from "next-auth/react";
 import { ReactNode } from "react";
 
 type Props = {
@@ -8,11 +7,7 @@ type Props = {
 };
 
 const Session = ({ children }: Props) => {
-  return (
-    <SessionProvider session={null} refetchInterval={0} refetchOnWindowFocus={false}>
-      {children}
-    </SessionProvider>
-  );
+  return <>{children}</>;
 };
 
 export default Session;
