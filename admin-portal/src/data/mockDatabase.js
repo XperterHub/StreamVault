@@ -12,8 +12,40 @@ const STORAGE_KEYS = {
 
 const SYNC_API_URL = typeof window !== 'undefined' ? `${window.location.origin}/api/sync` : '/api/sync';
 
-// Clean initial data - Strictly empty
-export const INITIAL_VIDEOS = [];
+// Initial Video Catalog — Jujutsu Kaisen default stream
+export const INITIAL_VIDEOS = [
+  {
+    id: "vid-jujutsu-kaisen",
+    title: "Jujutsu Kaisen",
+    description: "Action and adventure brooo",
+    thumbnailUrl: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&auto=format&fit=crop&q=80",
+    bannerUrl: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=1600&auto=format&fit=crop&q=80",
+    genre: "Action",
+    durationSeconds: 7200,
+    isPremiumOnly: false,
+    qualityTiers: {
+      freeCapped: "720p",
+      premiumUnlocked: ["1080p", "4K HDR"]
+    },
+    driveFileIds: {
+      videoDefault: "1eYdIEDowaxnXXDGOPAQrWGqh1io2nm50",
+      video1080p: "1eYdIEDowaxnXXDGOPAQrWGqh1io2nm50",
+      video4K: "1eYdIEDowaxnXXDGOPAQrWGqh1io2nm50"
+    },
+    audioTracks: [
+      {
+        id: "aud-en",
+        languageCode: "en",
+        languageName: "English",
+        driveFileId: "1eYdIEDowaxnXXDGOPAQrWGqh1io2nm50",
+        isDefault: true
+      }
+    ],
+    subtitles: [],
+    viewsCount: 1,
+    uploadedAt: "2026-11-12T19:00:00.000Z"
+  }
+];
 export const INITIAL_COUPONS = [];
 export const INITIAL_USERS = [];
 
@@ -55,7 +87,7 @@ if (typeof window !== 'undefined') {
       localStorage.removeItem(STORAGE_KEYS.SETTINGS);
       localStorage.removeItem(STORAGE_KEYS.METRICS);
 
-      localStorage.setItem(STORAGE_KEYS.VIDEOS, JSON.stringify([]));
+      localStorage.setItem(STORAGE_KEYS.VIDEOS, JSON.stringify(INITIAL_VIDEOS));
       localStorage.setItem(STORAGE_KEYS.COUPONS, JSON.stringify([]));
       localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify([]));
       localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(INITIAL_SETTINGS));
@@ -107,7 +139,13 @@ export const getDatabase = () => {
   return {
     getVideos: () => {
       const saved = localStorage.getItem(STORAGE_KEYS.VIDEOS);
-      return saved ? JSON.parse(saved) : INITIAL_VIDEOS;
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        } catch (e) {}
+      }
+      return INITIAL_VIDEOS;
     },
     saveVideos: (videos) => {
       localStorage.setItem(STORAGE_KEYS.VIDEOS, JSON.stringify(videos));
@@ -177,7 +215,7 @@ export const getDatabase = () => {
       };
     },
     resetAllToClean: () => {
-      localStorage.setItem(STORAGE_KEYS.VIDEOS, JSON.stringify([]));
+      localStorage.setItem(STORAGE_KEYS.VIDEOS, JSON.stringify(INITIAL_VIDEOS));
       localStorage.setItem(STORAGE_KEYS.COUPONS, JSON.stringify([]));
       localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify([]));
       localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(INITIAL_SETTINGS));

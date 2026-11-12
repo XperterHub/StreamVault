@@ -31,17 +31,50 @@ export function mapAdminVideoToMedia(v: any): Media {
   };
 }
 
+export const DEFAULT_JUJUTSU_KAISEN_MEDIA: Media = {
+  id: "vid-jujutsu-kaisen",
+  title: "Jujutsu Kaisen",
+  isForAdult: false,
+  type: "movies",
+  overview: "Action and adventure brooo",
+  image: {
+    poster: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&auto=format&fit=crop&q=80",
+    backdrop: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=1600&auto=format&fit=crop&q=80",
+  },
+  releasedAt: "2026-11-12",
+  language: { original: "en" },
+  driveFileIds: {
+    videoDefault: "1eYdIEDowaxnXXDGOPAQrWGqh1io2nm50",
+    video1080p: "1eYdIEDowaxnXXDGOPAQrWGqh1io2nm50",
+    video4K: "1eYdIEDowaxnXXDGOPAQrWGqh1io2nm50",
+  },
+  audioTracks: [
+    {
+      id: "aud-en",
+      languageCode: "en",
+      languageName: "English",
+      driveFileId: "1eYdIEDowaxnXXDGOPAQrWGqh1io2nm50",
+      isDefault: true,
+    },
+  ],
+  subtitles: [],
+  isPremiumOnly: false,
+  qualityTiers: { freeCapped: "720p", premiumUnlocked: ["1080p", "4K HDR"] },
+  durationSeconds: 7200,
+  streamUrl: "https://drive.google.com/file/d/1eYdIEDowaxnXXDGOPAQrWGqh1io2nm50/preview",
+};
+
 export function getStoredVideos(): Media[] {
-  if (typeof window === "undefined") return [];
+  if (typeof window === "undefined") return [DEFAULT_JUJUTSU_KAISEN_MEDIA];
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
+    if (!raw) return [DEFAULT_JUJUTSU_KAISEN_MEDIA];
     const parsed = JSON.parse(raw);
     if (Array.isArray(parsed) && parsed.length > 0) {
       return parsed.map(mapAdminVideoToMedia);
     }
   } catch {}
-  return [];
+  return [DEFAULT_JUJUTSU_KAISEN_MEDIA];
 }
 
 export function getStoredLatestVideo(): Media | null {
