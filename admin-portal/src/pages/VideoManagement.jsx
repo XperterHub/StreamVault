@@ -1020,7 +1020,7 @@ export default function VideoManagement() {
                       </button>
 
                       <a
-                        href="https://gen-lang-client-0020597755.web.app"
+                        href="https://gen-lang-client-0020597755.web.app/?watch=true"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-blue-600/15 hover:bg-blue-600/25 border border-blue-500/30 text-blue-300 text-xs font-semibold transition-colors btn-press"
